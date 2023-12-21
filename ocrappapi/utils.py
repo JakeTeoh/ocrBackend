@@ -57,6 +57,16 @@ def extract_text_by_regex(pattern, df):
     return ' '.join(matches)
 
 
+def convert_string_to_int(value):
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            return "The string cannot be converted to an integer."
+    else:
+        return value
+
+
 def preprocess_image(gray, preProcessingConfig):
     if not preProcessingConfig:
         gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
@@ -113,7 +123,8 @@ def ocr_by_template(request):
     df = ocrToDataframe(processed_image, psm)
     for item in config:
         if item.get("extractMethod") == "block":
-            text = extract_text_by_block(item.get("value"), df)
+            value = convert_string_to_int(item.get("value"))
+            text = extract_text_by_block(value, df)
         elif item.get("extractMethod") == "regex":
             text = extract_text_by_regex(item.get("value"), df)
         field = item.get("fieldName")
