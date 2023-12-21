@@ -69,22 +69,22 @@ def preprocess_image(gray, preProcessingConfig):
     kernelSize = preProcessingConfig.get("kernelSize", 1)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernelSize, kernelSize))
 
-    if preProcessingConfig.get("morphologyEx", True):
+    if preProcessingConfig.get("morphologyEx", False):
         iterations = preProcessingConfig.get("morphologyEx_iterations", 1)
         gray = cv2.morphologyEx(gray, cv2.MORPH_OPEN, kernel, iterations=iterations)
 
-    if preProcessingConfig.get("dilated", True):
+    if preProcessingConfig.get("dilated", False):
         iterations = preProcessingConfig.get("dilated_iterations", 1)
         gray = cv2.dilate(gray, kernel, iterations=iterations)
 
-    if preProcessingConfig.get("eroded", True):
+    if preProcessingConfig.get("eroded", False):
         iterations = preProcessingConfig.get("eroded_iterations", 1)
         gray = cv2.erode(gray, kernel, iterations=iterations)
 
-    if preProcessingConfig.get("threshold", True):
+    if preProcessingConfig.get("threshold", False):
         _, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
 
-    if preProcessingConfig.get("equalizeHist", True):
+    if preProcessingConfig.get("equalizeHist", False):
         gray = cv2.equalizeHist(gray)
 
     return gray
